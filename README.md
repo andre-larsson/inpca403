@@ -22,3 +22,7 @@ To do the INPCA, you have to create a Chunker that loads the data in chunks,
 and an INPCA model that is fitted to the Chunker object. The Chunker has a method `get_chunk(i)` that returns chunk i
 of the data. See example script in folder `scripts`.
 
+More Chunker classes for loading other types of data than HDF can be created following the same pattern as HDFChunker, as long
+as they have a method for getting a chunk of data, and returning the total number of chunks (see Chunker class in
+inpca403/inpca403.py).
+
