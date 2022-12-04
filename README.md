@@ -9,12 +9,14 @@ The dataset was too large to fit in memory for a normal PCA. I found the sklearn
 
 ## Installation
 
-Install the requirements, and then this package with the following commands:
+Install the requirements and the inpca403 package with
 
 ```bash
 pip install -r requirements.txt
 pip install -e .
 ```
+
+from the root directory of the repository.
 
 ## Usage
 
@@ -39,11 +41,12 @@ To transform and save the chunks iteratively, use the transform_and_save_to_csv 
 transformed_data = inPCA.transform_and_save_to_csv(chunker, "transformed.csv")
 ```
 
+See example script `scripts/run_inpca.py`.
+
 ## Creating new chunker classes
 
-The Chunker has a method `get_chunk(i)` that returns chunk i of the data. See example script in folder `scripts`.
+The Chunker has a method `get_chunk(i)` that returns chunk i of the data, `get_chunk_range()` that returns all chunk
+indices and `get_num_chunks()`for getting the number of chunks. 
 
-More Chunker classes for loading other types of data than HDF can be created following the same pattern as HDFChunker,
-as long as they have a method for getting a chunk of data, returning the total number of chunks, and a method for
-returning all chunk indices (see Chunker class in inpca403/inpca403.py).
-
+Chunker classes for loading other types of data can be created following the same pattern as HDFChunker, inheriting from
+the abstract class Chunker (see inpca403/inpca403.py).
