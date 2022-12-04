@@ -1,6 +1,6 @@
 # INPCA403
 Incremental normalised principal component analysis (INPCA), for doing PCAs on large datasets that cannot be fit into memory. It is based on the scikit-learn
-ICPA class, and currently only HDF files can be used with the package. The number 403 is a random number added
+ICPA class, able to read data from HDF files. The number 403 is a random number added
 to make sure the package name is unique.
 
 I developed this package for my own use, after attempting to do a PCA on a very large dataset for a Kaggle competition.
@@ -19,7 +19,7 @@ pip install -e .
 # Usage
 
 To do an INPCA, you have to create a Chunker that loads the data in chunks,
-and an INPCA model that is fitted to the Chunker object. The Chunker has a method `get_chunk(i)` that returns chunk i
+and an INPCA model that is fitted to the data (represented as a Chunker object). The Chunker has a method `get_chunk(i)` that returns chunk i
 of the data. See example script in folder `scripts`.
 
 More Chunker classes for loading other types of data than HDF can be created following the same pattern as HDFChunker,
