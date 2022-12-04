@@ -47,9 +47,10 @@ class HDFChunker(Chunker):
 
 class INPCA():
 
-    def __init__(self, n_components=20):
+    def __init__(self, n_components=20, n_jobs=8):
 
         self.n_components = n_components
+        self.n_jobs = n_jobs
         self.averages = []
         self.stds = []
         return
@@ -60,7 +61,7 @@ class INPCA():
             print(f"{chunk_i} of {hdf_chunker.get_num_chunks() - 1}")
             return df.mean(axis=0)
 
-        results = Parallel(n_jobs=8)(delayed(calc_sums)(i) for i in hdf_chunker.chunk_range())
+        results = Parallel(n_jobs=self.n_jobs)(delayed(calc_sums)(i) for i in hdf_chunker.chunk_range())
         self.averages = np.mean(results, axis=0)
         return self
 
@@ -75,7 +76,7 @@ class INPCA():
             print(f"{chunk_i} of {hdf_chunker.get_num_chunks() - 1}")
             return ((df - self.averages) ** 2).mean(axis=0)
 
-        results = Parallel(n_jobs=8)(delayed(calc_sums_of_squares)(i) for i in hdf_chunker.chunk_range())
+        results = Parallel(n_jobs=self.n_jobs)(delayed(calc_sums_of_squares)(i) for i in hdf_chunker.chunk_range())
         stds = np.sqrt(np.sum(results, axis=0))
 
         # identify columns with zero variance
@@ -105,6 +106,17 @@ class INPCA():
 
         print(f"Total amount of explained variance: {np.sum(self.ipca.explained_variance_ratio_)}")
         return self
+
+    def transform(self, hdf_chunker):
+        res = pd.DataFrame()
+        for i in hdf_chunker.chunk_range():
+            df = hdf_chunker.get_chunk(i)
+            norm = (df - self.averages) / self.stds
+
+            # transform with the PCA
+            norm_transformed = self.ipca.transform(norm)
+            res = res.append(pd.DataFrame(norm_transformed))
+        return res
 
     def transform_and_save_to_csv(self, hdf_chunker, save_path):
 
