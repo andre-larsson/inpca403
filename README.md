@@ -1,5 +1,5 @@
 # INPCA403
-This package does incremental normalised principal component analysis (INPCA) for doing PCAs on large datasets that cannot be fit into memory. It is based on the scikit-learn
+Incremental normalised principal component analysis (INPCA), for doing PCAs on large datasets that cannot be fit into memory. It is based on the scikit-learn
 ICPA class, and currently only HDF files can be used with the package. The number 403 is a random number added
 to make sure the package name is unique.
 
